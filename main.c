@@ -34,8 +34,12 @@ void read_template(char* p, char* front, char* tail) {
     int active = 0; // 0 means we do not think we are reading the seperator. 1 means we think we are reading the seperator
     int change = 0; // 0 means we have not hit the seperator yet are are writing to front. 1 means we have and we are now writing to tail.
     int wait = 0;
-    char temp[0]; 
+    char temp[1]; 
     while(p[pointer] != '\0') {
+	if (wait != 0) {
+	    wait--;
+	    continue;
+	}
 	if (change == 0) {
 	    switch(p[pointer]) {
 		// Here we are looking for a ~~~!
@@ -53,6 +57,7 @@ void read_template(char* p, char* front, char* tail) {
 			active = 0;
 		    break;
 		default:
+		    wait = active;
 		    active = 0;
 		    break;
 
